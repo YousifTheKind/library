@@ -15,7 +15,8 @@ const showDialog = document.querySelector(".addButton");
 const closeDialog = document.querySelector(".cancelBtn");
 const confirmBtn = document.querySelector(".confirmBtn")
 
-
+const rows = document.querySelector(".tableBody > * ")
+const form = document.querySelector("form");
 
 
 function Book(title, author, pages, read) {
@@ -35,8 +36,8 @@ function Book(title, author, pages, read) {
   function addBookToLibrary(title, author, pages, read) {
 
     const bookObject = new Book(title, author, pages, read);
-
-    myLibrary.push(bookObject)
+    
+    myLibrary.push(bookObject);
 }
 
 
@@ -47,16 +48,18 @@ function displayBooks() {
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
         tr.insertCell().textContent = myLibrary[index].read();
-        tr.insertCell(-1).append(removeBtn, toggleReadStatus);
+
+        removeBtn.addEventListener("click", function(e){
+            delete myLibrary[index];
+            tr.remove();
+        });  
     }
 }
 
-removeBtn.addEventListener("click", function(e){
-        e.target.closest("tr").toggle()
-});
 
 showDialog.addEventListener("click", function(){
     dialog.showModal();
+    form.reset();
 });
 
 confirmBtn.addEventListener("click", function(e) {
@@ -65,10 +68,8 @@ confirmBtn.addEventListener("click", function(e) {
     let author = document.getElementById("author").value;
     let pages = document.getElementById("pages").value;
     let read = document.querySelector("input[name='read']:checked").value;
-    console.log(read)
-
     addBookToLibrary(title, author, pages, read);
-
+    displayBooks()
     dialog.close();
 });
 
