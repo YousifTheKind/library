@@ -3,12 +3,6 @@ const myLibrary = [];
 
 const table = document.querySelector(".myTable").querySelector(".tableBody");
 
-const removeBtn = document.createElement('button');
-removeBtn.type = 'button'
-removeBtn.textContent = "Remove";
-
-const toggleReadStatus = document.createElement('button')
-toggleReadStatus.textContent = "Read Status"
 
 const dialog = document.querySelector("dialog");
 const showDialog = document.querySelector(".addButton");
@@ -23,21 +17,14 @@ function Book(title, author, pages, read) {
     this.author = author;
     this.pages = pages;
     this.read = function() {
-      if(read === "Yes") {return read}
-      else {return "No"}
+      if(read === "Yes") return read;
+      else return "No";
     };
   };
   
   function addBookToLibrary(title, author, pages, read) {
 
     const bookObject = new Book(title, author, pages, read);
-
-    // duplicate = myLibrary.some(e => 
-    //     e.title === bookObject.title && 
-    //     e.author === bookObject.author &&
-    //     e.pages === bookObject.pages &&
-    //     e.read() === bookObject.read() 
-    // );
 
     myLibrary.push(bookObject);
 }
@@ -47,7 +34,7 @@ function displayBooks() {
     // remove all rows
     const rows = document.querySelectorAll(".remove")
     if(rows.length > 0) rows.forEach(rows => rows.remove())
-    
+
     // add rows from myLibrary
     for (let index in myLibrary) {
         let tr = table.insertRow();
@@ -55,10 +42,29 @@ function displayBooks() {
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
         tr.insertCell().textContent = myLibrary[index].read();
+        
+        let removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.textContent = "Remove";
+
+        let toggleReadStatus = document.createElement('button');
+        toggleReadStatus.textContent = "Read Status";
+
+        removeBtn.addEventListener("click", function(e){
+            let rowIndex = removeBtn.closest("tr").getAttribute("att");
+            myLibrary.splice(rowIndex, 1);
+            removeBtn.closest("tr").remove();
+            });  
+
+        tr.insertCell().append(removeBtn)
+
         tr.setAttribute("class", "remove");
         tr.setAttribute("att", index);
     }
+
 }
+
+
 
 showDialog.addEventListener("click", function(){
     dialog.showModal();
@@ -95,7 +101,9 @@ closeDialog.addEventListener("click", function(){
     dialog.close();
 });
 
+
 // removeBtn.addEventListener("click", function(e){
 //     delete myLibrary[index];
 //     tr.remove();
 // });  
+
