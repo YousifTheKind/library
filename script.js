@@ -15,7 +15,6 @@ const showDialog = document.querySelector(".addButton");
 const closeDialog = document.querySelector(".cancelBtn");
 const confirmBtn = document.querySelector(".confirmBtn")
 
-const rows = document.querySelector(".tableBody > * ")
 const form = document.querySelector("form");
 
 
@@ -42,20 +41,21 @@ function Book(title, author, pages, read) {
 
 
 function displayBooks() {
+    // loop that checks if data is already displayed
+    const rows = document.querySelectorAll(".PlzRemove")
+    console.log(rows);
+    if(rows.length > 0) {rows.forEach(rows => rows.remove()); console.log("Rows removed")}
+    // loop that displays the data
     for (let index in myLibrary) {
         let tr = table.insertRow();
         tr.insertCell().textContent = myLibrary[index].title;
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
         tr.insertCell().textContent = myLibrary[index].read();
-
-        removeBtn.addEventListener("click", function(e){
-            delete myLibrary[index];
-            tr.remove();
-        });  
+        tr.setAttribute("class", "PlzRemove");
+        tr.setAttribute("att", index);
     }
 }
-
 
 showDialog.addEventListener("click", function(){
     dialog.showModal();
@@ -68,6 +68,7 @@ confirmBtn.addEventListener("click", function(e) {
     let author = document.getElementById("author").value;
     let pages = document.getElementById("pages").value;
     let read = document.querySelector("input[name='read']:checked").value;
+    console.log(read)
     addBookToLibrary(title, author, pages, read);
     displayBooks()
     dialog.close();
@@ -76,3 +77,8 @@ confirmBtn.addEventListener("click", function(e) {
 closeDialog.addEventListener("click", function(){
     dialog.close();
 });
+
+// removeBtn.addEventListener("click", function(e){
+//     delete myLibrary[index];
+//     tr.remove();
+// });  
