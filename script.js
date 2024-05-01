@@ -56,7 +56,7 @@ function displayBooks() {
             removeBtn.closest("tr").remove();
             });  
 
-        tr.insertCell().append(removeBtn)
+        tr.insertCell().before(removeBtn, toggleReadStatus)
 
         tr.setAttribute("class", "remove");
         tr.setAttribute("att", index);
