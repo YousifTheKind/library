@@ -53,7 +53,8 @@ function displayBooks() {
         removeBtn.addEventListener("click", function(e){
             let rowIndex = removeBtn.closest("tr").getAttribute("att");
             myLibrary.splice(rowIndex, 1);
-            removeBtn.closest("tr").remove();
+            console.log(myLibrary, rowIndex);
+            displayBooks();
             });  
 
         tr.insertCell().before(removeBtn, toggleReadStatus)
