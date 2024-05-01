@@ -23,36 +23,39 @@ function Book(title, author, pages, read) {
     this.author = author;
     this.pages = pages;
     this.read = function() {
-      if(read === "true") {return "Yes"}
+      if(read === "Yes") {return read}
       else {return "No"}
     };
-    this.info = function () {
-      let info = `${this.title} by ${this.author}, ${this.pages} pages, ${this.read()}`
-      return info
-    }
   };
   
   function addBookToLibrary(title, author, pages, read) {
 
     const bookObject = new Book(title, author, pages, read);
-    
+
+    // duplicate = myLibrary.some(e => 
+    //     e.title === bookObject.title && 
+    //     e.author === bookObject.author &&
+    //     e.pages === bookObject.pages &&
+    //     e.read() === bookObject.read() 
+    // );
+
     myLibrary.push(bookObject);
 }
 
 
 function displayBooks() {
-    // loop that checks if data is already displayed
-    const rows = document.querySelectorAll(".PlzRemove")
-    console.log(rows);
-    if(rows.length > 0) {rows.forEach(rows => rows.remove()); console.log("Rows removed")}
-    // loop that displays the data
+    // remove all rows
+    const rows = document.querySelectorAll(".remove")
+    if(rows.length > 0) rows.forEach(rows => rows.remove())
+    
+    // add rows from myLibrary
     for (let index in myLibrary) {
         let tr = table.insertRow();
         tr.insertCell().textContent = myLibrary[index].title;
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
         tr.insertCell().textContent = myLibrary[index].read();
-        tr.setAttribute("class", "PlzRemove");
+        tr.setAttribute("class", "remove");
         tr.setAttribute("att", index);
     }
 }
@@ -68,10 +71,24 @@ confirmBtn.addEventListener("click", function(e) {
     let author = document.getElementById("author").value;
     let pages = document.getElementById("pages").value;
     let read = document.querySelector("input[name='read']:checked").value;
-    console.log(read)
-    addBookToLibrary(title, author, pages, read);
-    displayBooks()
-    dialog.close();
+
+    // checks if it's already in the array
+    duplicate = myLibrary.some(e => 
+        e.title === title && 
+        e.author === author &&
+        e.pages === pages &&
+        e.read() === read 
+    );
+
+
+    if(!duplicate) {
+        addBookToLibrary(title, author, pages, read);
+        displayBooks();
+        dialog.close();
+    }
+    else {
+        alert("Book is already added")
+    } 
 });
 
 closeDialog.addEventListener("click", function(){
