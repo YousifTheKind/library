@@ -1,15 +1,13 @@
 const myLibrary = [];
-
-
 const table = document.querySelector(".myTable").querySelector(".tableBody");
-
-
 const dialog = document.querySelector("dialog");
 const showDialog = document.querySelector(".addButton");
 const closeDialog = document.querySelector(".cancelBtn");
 const confirmBtn = document.querySelector(".confirmBtn")
-
 const form = document.querySelector("form");
+
+// to be used inside actionButtons
+let tr 
 
 
 function Book(title, author, pages, read) {
@@ -29,7 +27,6 @@ function Book(title, author, pages, read) {
     myLibrary.push(bookObject);
 }
 
-
 function displayBooks() {
     // remove all rows
     const rows = document.querySelectorAll(".remove")
@@ -37,34 +34,48 @@ function displayBooks() {
 
     // add rows from myLibrary
     for (let index in myLibrary) {
-        let tr = table.insertRow();
+        tr = table.insertRow();
         tr.insertCell().textContent = myLibrary[index].title;
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
         tr.insertCell().textContent = myLibrary[index].read();
-        
-        let removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.textContent = "Remove";
-
-        let toggleReadStatus = document.createElement('button');
-        toggleReadStatus.textContent = "Read Status";
-
-        removeBtn.addEventListener("click", function(e){
-            let rowIndex = removeBtn.closest("tr").getAttribute("att");
-            myLibrary.splice(rowIndex, 1);
-            console.log(myLibrary, rowIndex);
-            displayBooks();
-            });  
-
-        tr.insertCell().before(removeBtn, toggleReadStatus)
-
+        actionButtons();
         tr.setAttribute("class", "remove");
         tr.setAttribute("att", index);
     }
 
 }
+function actionButtons() {
+    // create elements for remove and read status
+    let removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = "Remove";
 
+    let toggleReadStatus = document.createElement('button');
+    toggleReadStatus.textContent = "Read Status";
+
+    // removes the book from the library
+    removeBtn.addEventListener("click", function(e){
+        let rowIndex = removeBtn.closest("tr").getAttribute("att");
+        myLibrary.splice(rowIndex, 1);
+        displayBooks();
+        }); 
+
+
+    toggleReadStatus.addEventListener("click", function(e){
+        let rowIndex = removeBtn.closest("tr").getAttribute("att");
+        let readStatus = myLibrary[rowIndex].read;
+        if(readStatus == "Yes") {
+
+        }
+        else if(readStatus == "No") 
+            
+        console.log(readStatus)
+    });
+
+    // inserts the elements with the books
+    tr.insertCell().before(removeBtn, toggleReadStatus)
+}
 
 
 showDialog.addEventListener("click", function(){
@@ -87,7 +98,7 @@ confirmBtn.addEventListener("click", function(e) {
         e.read() === read 
     );
 
-
+    // show error message if it's duplicate
     if(!duplicate) {
         addBookToLibrary(title, author, pages, read);
         displayBooks();
@@ -101,10 +112,4 @@ confirmBtn.addEventListener("click", function(e) {
 closeDialog.addEventListener("click", function(){
     dialog.close();
 });
-
-
-// removeBtn.addEventListener("click", function(e){
-//     delete myLibrary[index];
-//     tr.remove();
-// });  
 
