@@ -14,10 +14,7 @@ function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.read = function() {
-      if(read === "Yes") return read;
-      else return "No";
-    };
+    this.read = read;
   };
   
   function addBookToLibrary(title, author, pages, read) {
@@ -26,6 +23,14 @@ function Book(title, author, pages, read) {
 
     myLibrary.push(bookObject);
 }
+
+
+// toggle read status
+Book.prototype.toggleReadStatus = function() {
+    if(this.read == "Yes") this.read = "No"
+    else if(this.read == "No") this.read = "Yes"
+}
+
 
 function displayBooks() {
     // remove all rows
@@ -38,21 +43,20 @@ function displayBooks() {
         tr.insertCell().textContent = myLibrary[index].title;
         tr.insertCell().textContent = myLibrary[index].author;
         tr.insertCell().textContent = myLibrary[index].pages;
-        tr.insertCell().textContent = myLibrary[index].read();
-        actionButtons();
+        tr.insertCell().textContent = myLibrary[index].read;
+        removeButton();
+        toggleRead();
         tr.setAttribute("class", "remove");
         tr.setAttribute("att", index);
     }
-
 }
-function actionButtons() {
+
+
+function removeButton() {
     // create elements for remove and read status
     let removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.textContent = "Remove";
-
-    let toggleReadStatus = document.createElement('button');
-    toggleReadStatus.textContent = "Read Status";
 
     // removes the book from the library
     removeBtn.addEventListener("click", function(e){
@@ -61,20 +65,22 @@ function actionButtons() {
         displayBooks();
         }); 
 
+    tr.appendChild(removeBtn)
+}
+
+
+function toggleRead() {
+    
+    let toggleReadStatus = document.createElement('button');
+    toggleReadStatus.textContent = "Read Status";
 
     toggleReadStatus.addEventListener("click", function(e){
-        let rowIndex = removeBtn.closest("tr").getAttribute("att");
-        let readStatus = myLibrary[rowIndex].read;
-        if(readStatus == "Yes") {
-
-        }
-        else if(readStatus == "No") 
-            
-        console.log(readStatus)
+        let rowIndex = toggleReadStatus.closest("tr").getAttribute("att");
+        myLibrary[rowIndex].toggleReadStatus()
+        displayBooks();
     });
 
-    // inserts the elements with the books
-    tr.insertCell().before(removeBtn, toggleReadStatus)
+    tr.appendChild(toggleReadStatus)
 }
 
 
@@ -82,6 +88,7 @@ showDialog.addEventListener("click", function(){
     dialog.showModal();
     form.reset();
 });
+
 
 confirmBtn.addEventListener("click", function(e) {
     e.preventDefault();
@@ -95,7 +102,7 @@ confirmBtn.addEventListener("click", function(e) {
         e.title === title && 
         e.author === author &&
         e.pages === pages &&
-        e.read() === read 
+        e.read === read 
     );
 
     // show error message if it's duplicate
