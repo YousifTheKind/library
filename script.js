@@ -10,14 +10,16 @@ const form = document.querySelector("form");
 let tr 
 
 
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-  };
+class Book{
+    constructor(title, author, pages, read){
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+    }
+}
   
-  function addBookToLibrary(title, author, pages, read) {
+function addBookToLibrary(title, author, pages, read) {
 
     const bookObject = new Book(title, author, pages, read);
 
