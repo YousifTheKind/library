@@ -9,7 +9,8 @@ body {
     margin: auto;
 }
 
-.addButton, .remove > button {
+.addButton,
+.remove > button {
     background-color: #4f46e5;
     color: #f8fafc;
     padding: 0.5rem 2rem 0.5rem;
@@ -28,4 +29,12 @@ body {
 
 .remove > button {
     margin: 5px;
+}
+
+form input:invalid {
+    border-color: red;
+}
+
+input:focus:invalid {
+    outline: none;
 }
